@@ -1,0 +1,51 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // ---------------------------------------------------------
+    // users/{userId}
+    // Phase 1: profile document created on signup.
+    // - Anyone signed in can read public profile fields.
+    // - Only the owner can create/update their own document.
+    // - No one can delete a user document directly (handled by
+    //   a server-side flow / Cloud Function in a later phase).
+    // ---------------------------------------------------------
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow create: if isOwner(userId)
+                    && request.resource.data.uid == userId
+                    && request.resource.data.username is string
+                    && request.resource.data.username.size() <= 20;
+      allow update: if isOwner(userId)
+                    && request.resource.data.uid == resource.data.uid;
+      allow delete: if false;
+    }
+
+    // ---------------------------------------------------------
+    // Everything below is scaffolding for later phases.
+    // Locked down by default until each phase defines real rules.
+    // ---------------------------------------------------------
+    match /posts/{postId} { allow read, write: if false; }
+    match /comments/{commentId} { allow read, write: if false; }
+    match /likes/{likeId} { allow read, write: if false; }
+    match /followers/{docId} { allow read, write: if false; }
+    match /following/{docId} { allow read, write: if false; }
+    match /messages/{docId} { allow read, write: if false; }
+    match /notifications/{docId} { allow read, write: if false; }
+    match /stories/{docId} { allow read, write: if false; }
+    match /saved/{docId} { allow read, write: if false; }
+    match /reports/{docId} { allow read, write: if false; }
+    match /settings/{docId} { allow read, write: if false; }
+    match /hashtags/{docId} { allow read, write: if false; }
+    match /analytics/{docId} { allow read, write: if false; }
+  }
+}

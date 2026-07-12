@@ -1,0 +1,37 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+    function isImage() {
+      return request.resource.contentType.matches('image/.*');
+    }
+    function under5MB() {
+      return request.resource.size < 5 * 1024 * 1024;
+    }
+
+    // avatars/{userId}/... — only the owner can upload, anyone can view.
+    match /avatars/{userId}/{fileName} {
+      allow read: if true;
+      allow write: if isOwner(userId) && isImage() && under5MB();
+    }
+
+    // covers/{userId}/... — same pattern, larger allowance.
+    match /covers/{userId}/{fileName} {
+      allow read: if true;
+      allow write: if isOwner(userId) && isImage() && request.resource.size < 8 * 1024 * 1024;
+    }
+
+    // Everything else is scaffolding for later phases (posts, stories,
+    // messages, voice notes) — locked until each phase defines rules.
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
