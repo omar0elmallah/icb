@@ -13,18 +13,12 @@
    Actual access control lives in your Firestore/Storage
    security rules (see /firestore.rules and /storage.rules).
    ============================================================ */
-import { initializeApp } from "firebase/app";
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getStorage } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
-// Import the functions you need from the SDKs you need
-
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyAQbXmDrwZA96xQGeVOJFyPytoTYH1oYjY",
   authDomain: "gen-lang-client-0711136622.firebaseapp.com",
@@ -33,9 +27,6 @@ const firebaseConfig = {
   messagingSenderId: "1086342223086",
   appId: "1:1086342223086:web:9ec9301684f84cb7370fff"
 };
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
 
 const app = initializeApp(firebaseConfig);
 
