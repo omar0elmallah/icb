@@ -1,0 +1,230 @@
+/* ============================================================
+   Auth pages — split layout with a drifting aurora mesh.
+   The blobs are the signature visual: three soft radial
+   gradients that circle slowly behind the glass card.
+   ============================================================ */
+
+.auth-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+/* Left: aurora stage */
+.auth-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: var(--space-7);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.aurora-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.55;
+  z-index: -1;
+}
+.aurora-blob.b1 {
+  width: 480px; height: 480px;
+  top: -120px; left: -100px;
+  background: var(--accent-violet);
+  animation: drift-a 16s ease-in-out infinite alternate;
+}
+.aurora-blob.b2 {
+  width: 420px; height: 420px;
+  bottom: -140px; left: 120px;
+  background: var(--accent-cyan);
+  animation: drift-b 20s ease-in-out infinite alternate;
+}
+.aurora-blob.b3 {
+  width: 360px; height: 360px;
+  top: 40%; left: 40%;
+  background: var(--accent-coral);
+  opacity: 0.35;
+  animation: drift-c 14s ease-in-out infinite alternate;
+}
+@keyframes drift-a {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(60px, 40px) scale(1.08); }
+}
+@keyframes drift-b {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(-50px, -30px) scale(1.05); }
+}
+@keyframes drift-c {
+  from { transform: translate(-30px, 20px) scale(0.95); }
+  to   { transform: translate(30px, -20px) scale(1.1); }
+}
+
+.auth-stage-copy {
+  max-width: 420px;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+.auth-stage-copy .eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-cyan);
+  margin-bottom: var(--space-4);
+  display: block;
+}
+.auth-stage-copy h1 {
+  font-size: 38px;
+  line-height: 1.15;
+  margin-bottom: var(--space-4);
+}
+.auth-stage-copy p {
+  color: var(--text-muted);
+  font-size: 15.5px;
+  line-height: 1.6;
+}
+
+.stage-stats {
+  display: flex;
+  gap: var(--space-6);
+  margin-top: var(--space-7);
+}
+.stage-stats .stat-value {
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--text);
+}
+.stage-stats .stat-label {
+  font-size: 12px;
+  color: var(--text-faint);
+  margin-top: 2px;
+}
+
+/* Right: form panel */
+.auth-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+  background: var(--bg-elevated);
+  border-left: 1px solid var(--surface-border);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 400px;
+}
+
+.auth-card .brand-lockup {
+  margin-bottom: var(--space-6);
+}
+
+.auth-card h2 {
+  font-size: 24px;
+  margin-bottom: var(--space-1);
+}
+
+.auth-card .subtitle {
+  color: var(--text-muted);
+  font-size: 14px;
+  margin-bottom: var(--space-6);
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: var(--space-5) 0;
+  color: var(--text-faint);
+  font-size: 12.5px;
+}
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--surface-border);
+}
+
+.auth-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: var(--space-4) 0;
+  font-size: 13.5px;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  cursor: pointer;
+  user-select: none;
+}
+.remember-me input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent-violet);
+}
+
+.auth-footer {
+  text-align: center;
+  margin-top: var(--space-6);
+  font-size: 13.5px;
+  color: var(--text-muted);
+}
+
+.auth-footer a { font-weight: 600; }
+
+/* Password strength meter */
+.strength-meter {
+  display: flex;
+  gap: 4px;
+  margin-top: 8px;
+  margin-bottom: -8px;
+}
+.strength-meter .bar {
+  height: 3px;
+  flex: 1;
+  border-radius: 2px;
+  background: var(--surface-border);
+  transition: background var(--transition-fast);
+}
+.strength-meter[data-level="1"] .bar:nth-child(1) { background: var(--error); }
+.strength-meter[data-level="2"] .bar:nth-child(-n+2) { background: var(--warning); }
+.strength-meter[data-level="3"] .bar:nth-child(-n+3) { background: var(--accent-cyan); }
+.strength-meter[data-level="4"] .bar { background: var(--success); }
+
+.theme-toggle-float {
+  position: absolute;
+  top: var(--space-5);
+  right: var(--space-5);
+  z-index: 5;
+}
+
+/* Loading spinner inside button */
+.btn .spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: none;
+}
+.btn.is-loading .spinner { display: inline-block; }
+.btn.is-loading .btn-label { opacity: 0.7; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .auth-shell { grid-template-columns: 1fr; }
+  .auth-stage { display: none; }
+  .auth-panel { border-left: none; }
+}
